@@ -1,0 +1,12 @@
+############# BASE IMAGE #################################
+FROM openjdk:8 as build
+
+WORKDIR /app
+COPY . /app
+
+############# MULTI STAGE IMAGE #################################
+FROM openjdk:8-jdk-alpine as main
+COPY --from=build /app /
+EXPOSE 8080
+ADD target/springboot-crud-k8s.jar springboot-crud-k8s.jar
+ENTRYPOINT ["java","-jar","/springboot-crud-k8s.jar"]
